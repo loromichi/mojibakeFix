@@ -2,6 +2,7 @@ __author__ = 'loromichi'
 
 
 import os
+import math
 import pickle
 from itertools import product
 
@@ -47,6 +48,12 @@ def n_gram():
     ngram = dict()
     ngram[1] = make_ngram_dict(os.path.join("ngram", "1gm-0000"), 1)
     ngram[2] = make_ngram_dict(os.path.join("ngram", "2gm-0000"), 2)
+
+    # 頻度を確率のログに変換
+    for n, d in ngram.items():
+        s = sum(ngram[n].values())
+        for k, num in ngram[n].items():
+            ngram[n][k] = math.log(num / s)
 
     with open("ngram.pickle", "wb") as f:
         pickle.dump(ngram, f)
