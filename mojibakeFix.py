@@ -4,7 +4,7 @@ from decoder import UTF_8
 
 
 def main():
-    with open("out.txt", "rb") as f:
+    with open("sample.txt", "rb") as f:
         lines = f.read()
     print(lines.decode("UTF-8", errors="replace"))
 
