@@ -32,7 +32,9 @@ def make_utf8_char_set():
         except UnicodeDecodeError:
             pass
 
-    with open("utf8_charset.pickle", "wb") as f:
+    if not os.path.exists("pickles"):
+        os.mkdir("pickles")
+    with open(os.path.join("pickles", "utf8_charset.pickle"), "wb") as f:
         pickle.dump(bytes_dict, f)
 
 
@@ -49,10 +51,12 @@ def n_gram():
     ngram[1] = make_ngram_dict(os.path.join("ngram", "1gm-0000"), 1)
     ngram[2] = make_ngram_dict(os.path.join("ngram", "2gm-0000"), 2)
 
-    with open("ngram.pickle", "wb") as f:
+    if not os.path.exists("pickles"):
+        os.mkdir("pickles")
+    with open(os.path.join("pickles", "ngram.pickle"), "wb") as f:
         pickle.dump(ngram, f)
 
 
 if __name__ == '__main__':
-    #make_utf8_char_set()
+    make_utf8_char_set()
     n_gram()
