@@ -109,7 +109,8 @@ class UTF_8():
         uni_gram = self.ngram_dict[1]
         bi_gram = self.ngram_dict[2]
 
-        uni_sam = sum(uni_gram.values())    # uni-gramの合計数
+        alpha = 0.01
+        uni_sam = sum(uni_gram.values()) + len(uni_gram) * alpha   # uni-gramの合計数
 
         graph = Graph()
         now_ids = [0]  # <S>を入れる
@@ -117,11 +118,7 @@ class UTF_8():
             prev_ids = now_ids[:]  # 前回のノードid
             now_ids = []
             for now_char in chars:
-                uni_num = uni_gram.get((now_char, ), 0)
-
-                # TODO: 未知文字はSKIP
-                if uni_num == 0:
-                    continue
+                uni_num = uni_gram.get((now_char, ), 0) + alpha
 
                 node_weight = uni_num / uni_sam     # P(now_char)
 
@@ -131,8 +128,8 @@ class UTF_8():
                 # 前回の文字から現在の文字へのパスを張る
                 for prev_id in prev_ids:
                     prev_char = graph.id_node[prev_id].name
-                    bi_num = bi_gram.get((prev_char, now_char), 1)
-                    edge_weight = bi_num / uni_gram.get((prev_char, ))      # P(now_char|prev_char)
+                    bi_num = bi_gram.get((prev_char, now_char), 0) + alpha
+                    edge_weight = bi_num / (uni_gram.get((prev_char, ), 0) + alpha)     # P(now_char|prev_char)
 
                     graph.add_edge(prev_id, now_id, -1 * math.log(edge_weight))
 
