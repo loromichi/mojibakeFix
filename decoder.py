@@ -54,6 +54,11 @@ class UTF_8():
                     char_list.append(utf8_sequence[i:])
                     break
 
+        # 代替文字を-1に変換したときに，最後に余計な[-1]がついていたら削除
+        # UTF-8の1byte文字をShift_JISは内包しているので[-1]が単独で現れることはない
+        if char_list[-1] == [-1]:
+            char_list.pop()
+
         return char_list
 
     def generate_charcter(self, utf8_char):
