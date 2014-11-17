@@ -1,7 +1,6 @@
 mojibakeFix
 ===========
 
-Overview
 UTF-8で書かれたテキストをShift_JISで読み込んだ際に生じる文字化けを修正する
 
 
