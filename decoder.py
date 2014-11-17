@@ -1,15 +1,24 @@
 __author__ = 'loromichi'
 
-import sys
+import os
 import math
+import pickle
 from Graph import Graph, viterbi
-from settings import utf8_bytes_dict, ngram_dict
 
 
 class UTF_8():
     """
     文字化けしたUTF-8のバイト列をもとに解釈可能な文字列のグラフを作成する
     """
+    def __init__(self):
+        # UTF-8の各バイトの文字集合
+        # bytes_dict = {1: set(), 2: set(), 3: set(), 4: set()}
+        with open(os.path.join("pickles", "utf8_charset.pickle"), "rb") as f:
+            self.utf8_bytes_dict = pickle.load(f)
+
+        # ngram
+        with open(os.path.join("pickles", "ngram.pickle"), "rb") as f:
+            self.ngram_dict = pickle.load(f)
 
     def num_of_byte(self, b):
         """
@@ -70,7 +79,7 @@ class UTF_8():
 
         # すべてが-1なら予め用意したnバイト文字の集合を返す
         if utf8_char == [-1] * len(utf8_char):
-            return utf8_bytes_dict[len(utf8_char)]
+            return self.utf8_bytes_dict[len(utf8_char)]
 
         char_set = set()
         stack = [utf8_char]
@@ -97,8 +106,8 @@ class UTF_8():
         グラフを作成する
         chars_list: [["あ"], [”い”, "う", "え", "お"],...]
         """
-        uni_gram = ngram_dict[1]
-        bi_gram = ngram_dict[2]
+        uni_gram = self.ngram_dict[1]
+        bi_gram = self.ngram_dict[2]
 
         uni_sam = sum(uni_gram.values())    # uni-gramの合計数
 
