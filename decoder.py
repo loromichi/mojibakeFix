@@ -70,6 +70,15 @@ class UTF_8():
 
         return char_list
 
+    def padding(self, utf8_char):
+        """
+        byte数が足りない文字を-1で埋める
+        [227, 128] -> [227, 128, -1]
+        """
+        n = self.num_of_byte(utf8_char[0])
+        for i in range(n - len(utf8_char)):
+            utf8_char += [-1]
+
     def generate_charcter(self, utf8_char):
         """
         brokenなUTF-8の1文字がきたとき，そこから解釈可能なUnicode文字の集合を生成する
@@ -139,6 +148,7 @@ class UTF_8():
         # 候補集合の作成
         chars_list = []
         for char in self.split_utf8(lines, replace_char):
+            self.padding(char)
             chars_list.append(list(self.generate_charcter(char)))
 
         # グラフの構築
