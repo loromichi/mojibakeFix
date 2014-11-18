@@ -9,10 +9,11 @@ from decoder import UTF_8
 def main():
     # 引数の処理
     parser = argparse.ArgumentParser(description='fix mojibake')
-    parser.add_argument('-f', type=str, help='text file')
+    parser.add_argument('-i', type=str, required=True, help='text file')
 
     args = parser.parse_args()
-    input_file = args.f
+    input_file = args.i
+    replacement_char = b"\x81\x45"
 
     if not os.path.exists(input_file):
         print(input_file, "is not found")
@@ -29,7 +30,7 @@ def main():
         lines = f.read()
 
     u = UTF_8()
-    fixed_string = u.fix_mojibake(lines, b"\x81\x45")
+    fixed_string = u.fix_mojibake(lines, replacement_char)
     print(fixed_string)
 
 
