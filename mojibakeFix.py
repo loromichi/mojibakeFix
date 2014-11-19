@@ -10,10 +10,11 @@ def main():
     # 引数の処理
     parser = argparse.ArgumentParser(description='fix mojibake')
     parser.add_argument('-i', type=str, required=True, help='text file')
+    parser.add_argument('-rep', type=str, nargs="+", default=["81", "45"], help='replacement character')
 
     args = parser.parse_args()
     input_file = args.i
-    replacement_char = b"\x81\x45"
+    replacement_char = bytes([int(i, 16) for i in args.rep])
 
     if not os.path.exists(input_file):
         print(input_file, "is not found")
